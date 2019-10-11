@@ -7,19 +7,19 @@ const Boom = require('boom'); //http error status codes
 const corsHeaders = require('hapi-cors-headers');
 const Scooter = require('scooter'); //user agent info
 const fs = require('fs');
-const Utils = require('./path_handlers/utilities.js');
-const Routes = require('./routes'); //cors support
-const  server = new Hapi.Server();
-var port = process.env.PORT || 4500;
-var host = process.env.HOST || 'localhost';
+var Utils = require('./path_handlers/utilities.js');
+var Routes = require('./routes'); //cors support
+
+var port = process.env.PORT || 4300;
+
+var server = new Hapi.Server();
 server.connection({
-    host: (host),
     port: (port),
     routes: { cors: true }
 });  
 
 // setup swagger options
-const swaggerOptions = {
+var swaggerOptions = {
     info: {
         version: '1',
         title: 'Technical Dev',
