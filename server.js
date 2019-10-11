@@ -14,7 +14,7 @@ server.connection({
     host: (process.env.HOST || 'localhost'),
     port: (process.env.PORT || 8084),
     routes: { cors: true }
-});
+});  
 
 // setup swagger options
 const swaggerOptions = {

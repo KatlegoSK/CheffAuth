@@ -5,7 +5,7 @@ const hstatus = require('hapi-status'); //HTTP Status codes
 function API_Ping(request,reply) {
  
 	var reqResponse = {
-		'body' : 'pong',
+		'body' : 'pong', 
 		'details' : 'success'
 	};
 	return hstatus.ok(reply, reqResponse);
