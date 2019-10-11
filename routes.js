@@ -389,7 +389,88 @@ module.exports = [
 			notes : 'Recipe read',
 			tags: ['api'] 
 		}
+	},
+	{ //Register with Firebase/
+		method: 'POST',
+		path: '/techDev/api/mailnotification/',
+		config: {
+		   plugins: {
+			   	'hapi-swagger' : {
+					payloadType : 'form',  
+					validate: {
+						payload : {
+							to: Joi.string().required(),
+							subject : Joi.string().required(),
+							text : Joi.string().required()
+
+						}
+					},
+					responses: {
+						'200': {
+							'description': 'Success with response data',
+							'schema': Joi.object({
+									statusCode: Joi.number().integer().default(200).required().description('HTTP Status Response Code. 200 - Successfull response with data.'),
+									result: Joi.object().required().keys({
+										body: Joi.string().required().default('Pong').description('API Result Body. Will contain the word - Pong, if successfull.'),
+										details: Joi.string().required().default('success').description('API Result Details. Will contain the word - success, if successfull.')
+									})
+								}).label('Response 200')
+						},
+						'206': {
+							'description': 'Success but no data found',
+							'schema': Joi.object({
+									statusCode: Joi.number().integer().default(206).required().description('HTTP Status Response Code. 206 - Successfull response with no data.'),
+									result: Joi.object().required().keys({
+										body: Joi.string().required().default('No Data').description('API Result Body. Will not contain data.'),
+										details: Joi.string().required().default('No Data found for input parameters provided').description('API Result Details. Will not contain data.')
+									})
+								}).label('Response 200')
+						},
+						'400': {
+							'description': 'Bad Request',
+							'schema': Joi.object({
+									statusCode: Joi.number().integer().default(400).required().description('HTTP Status Response Code. 400 - Bad Request.'),
+									error: Joi.string().required().default('Bad Request').description('Bad Request.')
+								}).label('Response 400')
+						},
+						'401': {
+							'description': 'Unauthorized',
+							'schema': Joi.object({
+									statusCode: Joi.number().integer().default(401).required().description('HTTP Status Response Code. 401 - Unauthorized.'),
+									error: Joi.string().required().default('Unauthorized').description('Unauthorized access attpempt.'),
+									message: Joi.string().required().default('Missing authentication or Bad Token').description('Missing authentication. Credentials not provided or incorrect'),
+									attributes: Joi.object().required().keys({
+										error: Joi.string().required().default('Bad token').description('Token provided is not valid.')
+									})
+								}).label('Response 401')
+						},						
+						'500': {
+							'description': 'Internal Server Error',
+							'schema': Joi.object({
+									statusCode: Joi.number().integer().default(500).required().description('HTTP Status Response Code. 500 - Internal Server Error.'),
+									error: Joi.string().required().default('Internal Server Error').description('Internal Server Error.'),
+									message: Joi.string().required().default('An internal server error occurred').description('An internal server error occurred')
+								}).label('Response 500')
+						}
+					}
+				},
+				disinfect: {
+					disinfectQuery: true,
+					disinfectParams: true,
+					disinfectPayload: true
+				},
+				'hapi-geo-locate': {
+					enabled: false
+				},
+				policies: ['isAdmin'],
+			},
+			handler:  ichefHandler.sendMail,
+			description: 'Email Notification',
+			notes : 'Email Notify',
+			tags: ['api']
+		}
 	}
+	
 
 	
 

@@ -8,14 +8,12 @@ const fs = require('fs');
 const path = require('path');
 const requestlib = require('request');
 var Observable = require('rxjs');
+const nodemailer = require('nodemailer');
 var firebase = require("firebase");
 var firestore = require('firebase/firestore');
 var firebaseConfig = config.get('environment.firebase');
-const settings = { timestampsInSnapshots: true };
 
 firebase.initializeApp(firebaseConfig);
-firebase.firestore().settings(settings);
-
 
 module.exports = {
 
@@ -187,6 +185,7 @@ module.exports = {
                             comments: data.comments,
                             content: data.content,
                             createdOn: data.createdOn
+                            //img : data.recipeImage
 
                         });
                     });
@@ -207,46 +206,59 @@ module.exports = {
                 return hstatus.ok(reply, reqResponse);
             });
 
+    },
+    sendMail : function (request, reply) {
+        //console.log("Call initiated : ", request.payload);
+        console.log("Initiated a call....");
+        var retObj = {};
+
+        async.parallel([
+
+            function (callback) {
+                
+                const transporter = nodemailer.createTransport({ 
+                    service: 'Gmail',
+                    auth: {
+                      user: 'sendmessageresponse@gmail.com',
+                      pass: 'SHerbbet@1011'
+                    }
+                  });
+
+                  var mailOptions = {
+                    from: 'sendmessageresponse@gmail.com',
+                    to: request.payload.to,
+                    subject: request.payload.subject,
+                    text: request.payload.text
+                  };
+
+                  transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                      console.log(error.response);
+                      retObj.message = error.response;
+                      callback(null, retObj);
+                    } else {
+                      console.log('Email sent: ' + info.response);
+                      retObj.message = 'Email sent';
+                      callback(null, retObj);
+                    }
+                  });
+
+            }
+        ],
+            function (err, results) {
+
+                var reqResponse = {
+                    'body': retObj,
+                    'details': 'success'
+                };
+                return hstatus.ok(reply, reqResponse);
+            });
+
     }
 
 
 }
 
-function onReadRecipes(ref) {
-    let promise = new Promise((resolve, reject) => {
-
-        let res = firebase.firestore().collection('recipes');
-        res.onSnapshot((querySnapshot) => {
-            let boards = [];
-            querySnapshot.forEach((doc) => {
-                let data = doc.data();
-                boards.push({
-                    key: doc.id,
-                    name: data.userName,
-                    userID: data.userId
-                });
-            });
-        });
-
-    })
-
-    // async.parallel([
-
-    //     function (callback) {
-
-
-
-    //     }
-    // ],
-    //     function (err, results) {
-
-    //         var reqResponse = {
-    //             'body': retObj,
-    //             'details': 'success'
-    //         };
-    //         return hstatus.ok(reply, reqResponse);
-    //     });
-}
 
 function prepareLogin(email, password) {
     return firebase.auth().signInWithEmailAndPassword(email, password);
