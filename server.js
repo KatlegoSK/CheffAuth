@@ -10,12 +10,14 @@ const fs = require('fs');
 var Utils = require('./path_handlers/utilities.js');
 var Routes = require('./routes'); //cors support
 
-var port = process.env.PORT || 4300;
+var port = process.env.PORT || 8084;
+var host = process.env.HOST || 'localhost';
 
 var server = new Hapi.Server();
 server.connection({
-    port: (port),
-    routes: { cors: true }
+	port: (port),
+	host: (host),
+    routes: { cors: true } 
 });  
 
 // setup swagger options
