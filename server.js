@@ -15,7 +15,7 @@ var host = process.env.HOST || 'localhost';
 
 var server = new Hapi.Server();
 server.connection({
-	port: port,
+	port: (+process.env.PORT || 6700),
     routes: { cors: true } 
 });  
 
