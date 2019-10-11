@@ -10,9 +10,11 @@ const fs = require('fs');
 const Utils = require('./path_handlers/utilities.js');
 const Routes = require('./routes'); //cors support
 const  server = new Hapi.Server();
+var port = process.env.PORT || 4500;
+var host = process.env.HOST || 'localhost';
 server.connection({
-    host: (process.env.HOST || 'localhost'),
-    port: (process.env.PORT || 8084),
+    host: (host),
+    port: (port),
     routes: { cors: true }
 });  
 
