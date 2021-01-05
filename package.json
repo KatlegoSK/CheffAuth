@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "async": "^2.4.1",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "blipp": "^2.3.0",
     "bluebird": "^3.5.0",
     "body-parser": "^1.19.0",
