@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "async": "^2.4.1",
+    "async": "^2.6.4",
     "axios": "^0.18.0",
     "blipp": "^2.3.0",
     "bluebird": "^3.5.0",
