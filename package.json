@@ -33,7 +33,7 @@
     "hapi-server-session": "^3.0.2",
     "hapi-status": "^2.1.0",
     "hapi-swagger": "^7.7.0",
-    "hapijs-status-monitor": "^0.5.0",
+    "hapijs-status-monitor": "^1.0.1",
     "he": "^1.2.0",
     "http2": "^3.3.7",
     "inert": "^4.2.0",
